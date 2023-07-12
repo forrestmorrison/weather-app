@@ -5,7 +5,9 @@ function App() {
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${process.env.REACT_APP_OPEN_WEATHER_API_KEY}`
+  const apiKey = process.env.REACT_APP_OPEN_WEATHER_API_KEY
+
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=imperial&appid=${apiKey}`
   
   const searchLocation = (event) => {
     if (event.key === 'Enter') {
@@ -30,29 +32,33 @@ function App() {
       <div className="container">
         <div className="top">
           <div className="location">
-            <p>Austin</p>
+            <p>{data.name}</p>
           </div>
           <div className="temp">
-            <h1>100°F</h1>
+            {data.main ? <h1>{data.main.temp.toFixed()}°F</h1> : null}
           </div>
           <div className="description">
-            <p>Clear</p>
+            {data.weather ? <p>{data.weather[0].main}</p> : null}
           </div>
         </div>
-        <div className="bottom">
-          <div className="feels">
-            <p>Feels Like</p>
-            <p className="bold">102°F</p>
+
+        {
+          data.name != undefined && 
+          <div className="bottom">
+            <div className="feels">
+              <p>Feels Like</p>
+              {data.main ? <p className="bold">{data.main.feels_like.toFixed()}</p> : null}
+            </div>
+            <div className="humidity">
+              <p>Humidity</p>
+              {data.main ? <p className="bold">{data.main.humidity}</p> : null}
+            </div>
+            <div className="wind">
+              <p>Wind Speed</p>
+              {data.main ? <p className="bold">{data.wind.speed.toFixed()} MPH</p> : null}
+            </div>
           </div>
-          <div className="humidity">
-            <p>Humidity</p>
-            <p className="bold">20%</p>
-          </div>
-          <div className="wind">
-            <p>Wind Speed</p>
-            <p className="bold">12 mph</p>
-          </div>
-        </div>
+        }
       </div>
     </div>
   );
